@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Interview {
+  id          String    @id @default(cuid())
+  role        String
+  difficulty  String    @default("medium")
+  status      String    @default("in_progress")
+  context     String?
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+  messages    Message[]
+  result      Result?
+}
+
+model Message {
+  id          String    @id @default(cuid())
+  interviewId String
+  role        String
+  content     String
+  createdAt   DateTime  @default(now())
+  interview   Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+}
+
+model Result {
+  id                 String    @id @default(cuid())
+  interviewId        String    @unique
+  technicalScore     Int
+  communicationScore Int
+  confidenceScore    Int
+  overallScore       Int
+  strengths          String
+  weaknesses         String
+  suggestions        String
+  summary            String
+  createdAt          DateTime  @default(now())
+  interview          Interview @relation(fields: [interviewId], references: [id], onDelete: Cascade)
+}

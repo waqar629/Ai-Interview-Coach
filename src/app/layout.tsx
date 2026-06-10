@@ -26,7 +26,7 @@ export default function RootLayout({
         {/* Set theme before first paint to prevent flash */}
         <script dangerouslySetInnerHTML={{ __html: `try{document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark')}catch(e){document.documentElement.setAttribute('data-theme','dark')}` }} />
       </head>
-      <body className="min-h-full flex flex-col bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100 antialiased font-[family-name:var(--font-geist)] transition-colors duration-200">
+      <body className="min-h-full flex flex-col bg-background text-foreground antialiased font-[family-name:var(--font-geist)] transition-colors duration-200">
         <ThemeProvider>
           {/* Global top bar with theme toggle */}
           <div className="flex justify-end px-4 py-2 border-b border-gray-200 dark:border-zinc-800/60 bg-white dark:bg-zinc-950 shadow-sm dark:shadow-none">

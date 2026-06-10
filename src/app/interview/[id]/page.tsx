@@ -327,19 +327,19 @@ export default function InterviewPage({ params }: PageProps) {
           <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
             {/* Avatar */}
             {msg.role === "assistant" ? (
-              <div className="w-9 h-9 rounded-full flex-shrink-0 bg-gradient-to-br from-violet-600 to-cyan-600 flex items-center justify-center shadow-sm">
-                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1 1 .03 2.798-1.338 2.798a1.595 1.595 0 01-1.037-.386l-1.854-1.854M5 14.5l-1.402 1.402C2.6 16.902 3.57 18.7 4.938 18.7c.389 0 .763-.14 1.037-.386l1.854-1.854" />
-                </svg>
-              </div>
-            ) : (
               <div className="w-9 h-9 rounded-full flex-shrink-0 overflow-hidden ring-2 ring-violet-400/40 shadow-sm">
                 <Image src="/avatar.jpg" alt="Hassan" width={36} height={36} className="w-full h-full" style={{ objectFit: "cover", objectPosition: "center 25%" }} />
+              </div>
+            ) : (
+              <div className="w-9 h-9 rounded-full flex-shrink-0 bg-zinc-600 dark:bg-zinc-700 flex items-center justify-center shadow-sm">
+                <svg className="w-4 h-4 text-zinc-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
               </div>
             )}
             <div className="flex flex-col gap-1 max-w-[80%]">
               <span className={`text-xs font-bold ${msg.role === "assistant" ? "text-violet-600 dark:text-violet-400" : "text-right text-gray-500 dark:text-zinc-500"}`}>
-                {msg.role === "assistant" ? "AI Interviewer" : "Hassan"}
+                {msg.role === "assistant" ? "Hassan" : "You"}
               </span>
               <div
                 className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
@@ -374,10 +374,8 @@ export default function InterviewPage({ params }: PageProps) {
 
         {sending && (
           <div className="flex gap-3">
-            <div className="w-9 h-9 rounded-full flex-shrink-0 bg-gradient-to-br from-violet-600 to-cyan-600 flex items-center justify-center shadow-sm">
-              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1 1 .03 2.798-1.338 2.798a1.595 1.595 0 01-1.037-.386l-1.854-1.854M5 14.5l-1.402 1.402C2.6 16.902 3.57 18.7 4.938 18.7c.389 0 .763-.14 1.037-.386l1.854-1.854" />
-              </svg>
+            <div className="w-9 h-9 rounded-full flex-shrink-0 overflow-hidden ring-2 ring-violet-400/40 shadow-sm">
+              <Image src="/avatar.jpg" alt="Hassan" width={36} height={36} className="w-full h-full" style={{ objectFit: "cover", objectPosition: "center 25%" }} />
             </div>
             <div className="bg-gray-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm px-4 py-3">
               <div className="flex gap-1 items-center h-5">

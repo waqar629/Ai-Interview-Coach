@@ -34,7 +34,9 @@ export default function InterviewPage({ params }: PageProps) {
   const [isListening, setIsListening] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
   const isMutedRef = useRef(false);
+  const isListeningRef = useRef(false);
   const lastSpokenIdRef = useRef<string>("");
+  const finalTranscriptRef = useRef<string>("");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const recognitionRef = useRef<any>(null);
 
@@ -171,7 +173,18 @@ export default function InterviewPage({ params }: PageProps) {
 
   function toggleListening() {
     if (isListening) {
+      isListeningRef.current = false;
       recognitionRef.current?.stop();
+      setIsListening(false);
+      // Set final clean transcript
+      setInput(finalTranscriptRef.current);
+      setTimeout(() => {
+        const ta = textareaRef.current;
+        if (ta) {
+          ta.style.height = "auto";
+          ta.style.height = Math.min(ta.scrollHeight, 160) + "px";
+        }
+      }, 0);
       return;
     }
 
@@ -179,15 +192,26 @@ export default function InterviewPage({ params }: PageProps) {
     const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SR) return;
 
+    finalTranscriptRef.current = input;
+
     const recognition = new SR();
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    recognition.continuous = true;
+    recognition.interimResults = true;
     recognition.lang = "en-US";
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognition.onresult = (event: any) => {
-      const transcript: string = event.results[0][0].transcript;
-      setInput((prev) => (prev ? prev + " " + transcript : transcript));
+      let interim = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const t = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscriptRef.current += (finalTranscriptRef.current ? " " : "") + t;
+        } else {
+          interim += t;
+        }
+      }
+      const display = finalTranscriptRef.current + (interim ? " " + interim : "");
+      setInput(display);
       setTimeout(() => {
         const ta = textareaRef.current;
         if (ta) {
@@ -197,17 +221,21 @@ export default function InterviewPage({ params }: PageProps) {
       }, 0);
     };
 
+    // Restart automatically if browser stops mid-session (pauses cause onend to fire)
     recognition.onend = () => {
-      setIsListening(false);
-      recognitionRef.current = null;
+      if (isListeningRef.current) {
+        try { recognition.start(); } catch { /* ignore */ }
+      }
     };
 
     recognition.onerror = () => {
-      setIsListening(false);
-      recognitionRef.current = null;
+      if (isListeningRef.current) {
+        try { recognition.start(); } catch { /* ignore */ }
+      }
     };
 
     recognitionRef.current = recognition;
+    isListeningRef.current = true;
     recognition.start();
     setIsListening(true);
   }

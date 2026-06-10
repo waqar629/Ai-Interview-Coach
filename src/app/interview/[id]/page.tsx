@@ -328,7 +328,9 @@ export default function InterviewPage({ params }: PageProps) {
             {/* Avatar */}
             {msg.role === "assistant" ? (
               <div className="w-9 h-9 rounded-full flex-shrink-0 bg-gradient-to-br from-violet-600 to-cyan-600 flex items-center justify-center shadow-sm">
-                <span className="text-white font-black text-xs">Alex</span>
+                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1 1 .03 2.798-1.338 2.798a1.595 1.595 0 01-1.037-.386l-1.854-1.854M5 14.5l-1.402 1.402C2.6 16.902 3.57 18.7 4.938 18.7c.389 0 .763-.14 1.037-.386l1.854-1.854" />
+                </svg>
               </div>
             ) : (
               <div className="w-9 h-9 rounded-full flex-shrink-0 overflow-hidden ring-2 ring-violet-400/40 shadow-sm">
@@ -337,7 +339,7 @@ export default function InterviewPage({ params }: PageProps) {
             )}
             <div className="flex flex-col gap-1 max-w-[80%]">
               <span className={`text-xs font-bold ${msg.role === "assistant" ? "text-violet-600 dark:text-violet-400" : "text-right text-gray-500 dark:text-zinc-500"}`}>
-                {msg.role === "assistant" ? "Alex (AI Interviewer)" : "Hassan"}
+                {msg.role === "assistant" ? "AI Interviewer" : "Hassan"}
               </span>
               <div
                 className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
@@ -373,7 +375,9 @@ export default function InterviewPage({ params }: PageProps) {
         {sending && (
           <div className="flex gap-3">
             <div className="w-9 h-9 rounded-full flex-shrink-0 bg-gradient-to-br from-violet-600 to-cyan-600 flex items-center justify-center shadow-sm">
-              <span className="text-white font-black text-xs">Alex</span>
+              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0112 15a9.065 9.065 0 00-6.23-.693L5 14.5m14.8.8l1.402 1.402c1 1 .03 2.798-1.338 2.798a1.595 1.595 0 01-1.037-.386l-1.854-1.854M5 14.5l-1.402 1.402C2.6 16.902 3.57 18.7 4.938 18.7c.389 0 .763-.14 1.037-.386l1.854-1.854" />
+              </svg>
             </div>
             <div className="bg-gray-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm px-4 py-3">
               <div className="flex gap-1 items-center h-5">

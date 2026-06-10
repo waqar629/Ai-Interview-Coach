@@ -21,35 +21,35 @@ export function FloatingContact() {
     <div ref={ref} className="fixed right-5 bottom-6 z-50 flex flex-col items-end gap-3">
       {/* Contact card */}
       {open && (
-        <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-2xl shadow-2xl w-64 overflow-hidden">
-          {/* Gradient header banner */}
-          <div className="bg-gradient-to-br from-violet-600 to-cyan-600 h-20 relative">
+        <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-2xl shadow-2xl w-72 overflow-hidden">
+          {/* Full-width photo header */}
+          <div className="relative h-44">
+            <Image
+              src="/avatar.jpg"
+              alt="Waqar Hassan"
+              fill
+              sizes="288px"
+              className="object-cover"
+              style={{ objectPosition: "center 20%" }}
+            />
+            {/* Subtle gradient overlay at bottom for text legibility */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
             <button
               onClick={() => setOpen(false)}
-              className="absolute top-3 right-3 text-white/70 hover:text-white transition-colors"
+              className="absolute top-3 right-3 w-7 h-7 rounded-full bg-black/40 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 transition-all"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
 
-          {/* Avatar overlapping header */}
-          <div className="flex flex-col items-center -mt-12 px-5 pb-5">
-            <div className="w-24 h-24 rounded-full border-4 border-white dark:border-zinc-900 shadow-lg overflow-hidden ring-2 ring-violet-500/30 mb-3">
-              <Image
-                src="/avatar.jpg"
-                alt="Waqar Hassan"
-                width={96}
-                height={96}
-                className="w-full h-full"
-                style={{ objectFit: "cover", objectPosition: "center 25%" }}
-              />
-            </div>
+          {/* Info + links */}
+          <div className="px-5 py-4">
             <p className="font-black text-gray-900 dark:text-zinc-100 text-base">Waqar Hassan</p>
             <p className="text-xs text-gray-500 dark:text-zinc-500 font-medium mb-4">Full Stack Developer</p>
 
-            <div className="w-full space-y-2">
+            <div className="space-y-2">
               <a
                 href="https://www.linkedin.com/in/waqar628/"
                 target="_blank"
@@ -85,7 +85,7 @@ export function FloatingContact() {
               </a>
             </div>
 
-            <p className="text-xs text-gray-400 dark:text-zinc-600 text-center mt-4 pt-3 border-t border-gray-100 dark:border-zinc-800 w-full">
+            <p className="text-xs text-gray-400 dark:text-zinc-600 text-center mt-4 pt-3 border-t border-gray-100 dark:border-zinc-800">
               Open to opportunities 👋
             </p>
           </div>
@@ -108,7 +108,7 @@ export function FloatingContact() {
           width={56}
           height={56}
           className="w-full h-full"
-          style={{ objectFit: "cover", objectPosition: "center 25%" }}
+          style={{ objectFit: "cover", objectPosition: "center 20%" }}
         />
       </button>
     </div>

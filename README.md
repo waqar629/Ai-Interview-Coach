@@ -40,58 +40,6 @@ Groq's free tier gives 6,000 requests/day on llama-3.3-70b — more than enough 
 
 ---
 
-## Setup (local)
-
-### 1. Clone and install
-
-```bash
-git clone https://github.com/waqar629/Ai-Interview-Coach.git
-cd Ai-Interview-Coach
-npm install
-```
-
-### 2. Get a free Groq API key
-
-1. Go to [console.groq.com](https://console.groq.com) and create a free account
-2. Navigate to **API Keys** → **Create API Key**
-3. Copy the key (starts with `gsk_`)
-
-No billing info required.
-
-### 3. Set up a free Turso database
-
-1. Go to [turso.tech](https://turso.tech) and sign up
-2. Create a new database
-3. Copy the database URL and auth token from the dashboard
-
-### 4. Add environment variables
-
-Create `.env.local` in the project root:
-
-```env
-GROQ_API_KEY=gsk_your_key_here
-
-TURSO_DATABASE_URL=libsql://your-db.turso.io
-TURSO_AUTH_TOKEN=your_auth_token_here
-DATABASE_URL=libsql://your-db.turso.io?authToken=your_auth_token_here
-```
-
-### 5. Push the database schema
-
-```bash
-node prisma/migrate.js
-```
-
-### 6. Start the app
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000).
-
----
-
 ## How to use it
 
 **Choose your language** — English or German. The AI conducts the entire interview in your chosen language, and all UI labels switch too.
@@ -114,65 +62,6 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── api/
-│   │   ├── extract-cv/          # Extracts text from PDF / DOCX / TXT uploads
-│   │   └── interview/
-│   │       ├── start/           # Creates interview record, gets opening question from Groq
-│   │       ├── [id]/
-│   │       │   ├── route.ts     # GET — full interview with messages
-│   │       │   ├── message/     # POST — sends answer, returns next AI question
-│   │       │   └── end/         # POST — runs evaluation, saves scores
-│   ├── interview/[id]/          # Live interview chat page (voice + text)
-│   ├── results/[id]/            # Scores and feedback page
-│   ├── globals.css              # Dark-by-default CSS variables
-│   ├── layout.tsx               # Root layout with theme script, toggle, footer
-│   └── page.tsx                 # Home — role picker, language, interview type, difficulty
-├── components/
-│   ├── ThemeProvider.tsx        # Dark/light context with localStorage persistence
-│   ├── ThemeToggle.tsx          # Sun/moon toggle button
-│   └── FloatingContact.tsx      # Fixed bottom-right contact card
-├── lib/
-│   ├── prisma.ts                # Prisma + LibSQL adapter (Turso)
-│   └── prompts.ts               # System prompt builder (role, difficulty, language, interview type)
-└── types/
-    └── index.ts
-public/
-├── avatar.jpg                   # Photo used in interview chat
-└── profile.png                  # Photo used in contact widget
-prisma/
-└── schema.prisma                # Interview, Message, Result models
-```
-
----
-
-## Environment Variables
-
-| Variable | What it's for |
-|---|---|
-| `GROQ_API_KEY` | Groq API key — free at console.groq.com |
-| `TURSO_DATABASE_URL` | Turso database URL (`libsql://...`) |
-| `TURSO_AUTH_TOKEN` | Turso auth token |
-| `DATABASE_URL` | Full libsql URL with auth token (used by Prisma) |
-
----
-
-## Deployment
-
-The app is deployed on **Vercel** with **Turso** as the cloud database. Vercel picks up environment variables from the project settings. The build command is `prisma generate && next build`.
-
-To deploy your own copy:
-1. Fork the repo
-2. Connect to Vercel
-3. Add the four environment variables in Vercel project settings
-4. Deploy
-
----
-
 ## Contact
 
 Built by **Waqar Hassan**
@@ -183,6 +72,10 @@ Built by **Waqar Hassan**
 
 ---
 
-## License
+## License & Copyright
 
-MIT
+© 2025 Waqar Hassan. All Rights Reserved.
+
+This project and its source code are the exclusive property of Waqar Hassan. No part of this codebase may be copied, modified, distributed, sublicensed, or used in any form — commercially or otherwise — without explicit written permission from the author.
+
+To request permission, contact: waqarhassan630@gmail.com

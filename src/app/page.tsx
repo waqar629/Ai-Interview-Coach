@@ -14,11 +14,11 @@ const ROLES: { label: string; icon: string; description: string }[] = [
   { label: "Mobile Developer", icon: "📱", description: "React Native, iOS, Android" },
 ];
 
-const DIFFICULTIES: { value: Difficulty; label: string; description: string; color: string }[] = [
-  { value: "easy", label: "Easy", description: "Fundamentals & concepts", color: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10" },
-  { value: "medium", label: "Medium", description: "Practical & mixed", color: "text-amber-400 border-amber-500/30 bg-amber-500/10" },
-  { value: "hard", label: "Hard", description: "Advanced & in-depth", color: "text-red-400 border-red-500/30 bg-red-500/10" },
-];
+const DIFF_COLORS = {
+  easy: "text-emerald-700 dark:text-emerald-400 border-emerald-500/40 bg-emerald-50 dark:bg-emerald-500/10",
+  medium: "text-amber-700 dark:text-amber-400 border-amber-500/40 bg-amber-50 dark:bg-amber-500/10",
+  hard: "text-red-700 dark:text-red-400 border-red-500/40 bg-red-50 dark:bg-red-500/10",
+};
 
 interface CustomRoleData {
   role: string;
@@ -43,6 +43,104 @@ export default function HomePage() {
   const [cvFileName, setCvFileName] = useState("");
   const [cvExtracting, setCvExtracting] = useState(false);
   const [cvFileError, setCvFileError] = useState("");
+
+  const t = language === "de"
+    ? {
+        badge: "KI-gestützter Interview-Coach",
+        heroTitle1: "Übe Vorstellungsgespräche mit",
+        heroTitle2: "echtem KI-Feedback",
+        heroSubtitle:
+          "Wähle deine Rolle, den Schwierigkeitsgrad und stelle dich einem KI-Interviewer, der Folgefragen stellt und deine Leistung bewertet.",
+        languageLabel: "Sprache",
+        step1: "1. Wähle deine Rolle",
+        step2: "2. Interviewtyp",
+        step3: "3. Schwierigkeitsgrad",
+        customRoleLabel: "Eigene Rolle",
+        customRoleSub: "Deine Rolle + Lebenslauf + Stelle",
+        customRoleEdit: "Klicken zum Bearbeiten",
+        interviewTypes: [
+          { value: "hr" as InterviewType, icon: "🤝", label: "HR / Verhalten", description: "Kommunikation, Motivation, Teamarbeit, Kulturfit" },
+          { value: "technical" as InterviewType, icon: "🧠", label: "Technisch", description: "Technisches Wissen, Architektur, Konzepte, Problemlösung" },
+          { value: "practical" as InterviewType, icon: "💻", label: "Praktisch / Coding", description: "Live-Coding, Aufgaben, Praxis-Implementierung, Debugging" },
+        ],
+        difficulties: [
+          { value: "easy" as Difficulty, label: "Einfach", description: "Grundlagen & Konzepte", color: DIFF_COLORS.easy },
+          { value: "medium" as Difficulty, label: "Mittel", description: "Praktisch & gemischt", color: DIFF_COLORS.medium },
+          { value: "hard" as Difficulty, label: "Schwer", description: "Fortgeschritten & detailliert", color: DIFF_COLORS.hard },
+        ],
+        startBtn: "Interview starten →",
+        startingBtn: "Interview wird gestartet…",
+        selectRoleHint: "Wähle eine Rolle um zu beginnen",
+        errorMsg: "Das Interview konnte nicht gestartet werden. Bitte versuche es erneut.",
+        modalTitle: "Eigene Rolle einrichten",
+        modalRoleLabel: "Deine Rolle / Berufsbezeichnung",
+        modalRolePlaceholder: "z.B. iOS-Entwickler, ML-Ingenieur, Sicherheitsanalyst…",
+        modalCvLabel: "Lebenslauf",
+        modalOptional: "(optional)",
+        modalUploadFile: "Datei hochladen",
+        modalChangeFile: "Datei ändern",
+        modalReadingFile: "Datei wird gelesen…",
+        modalCvPlaceholder: "Lebenslauf einfügen oder PDF/DOCX/TXT-Datei hochladen…",
+        modalJdLabel: "Stellenbeschreibung",
+        modalJdPlaceholder: "Stellenbeschreibung einfügen, damit die KI auf die richtigen Fähigkeiten eingeht…",
+        modalCancel: "Abbrechen",
+        modalConfirm: "Bestätigen",
+        howItWorks: "So funktioniert es",
+        howSteps: [
+          { step: "01", title: "Rolle wählen", desc: "Wähle den Job, für den du üben möchtest" },
+          { step: "02", title: "KI interviewt dich", desc: "Dynamische Fragen basierend auf Rolle und Level" },
+          { step: "03", title: "Natürlich antworten", desc: "Schreibe Antworten wie in einem echten Chat-Interview" },
+          { step: "04", title: "Bewertung erhalten", desc: "Erhalte Wertungen für Technik, Kommunikation & Selbstsicherheit" },
+        ],
+      }
+    : {
+        badge: "AI-Powered Interview Coach",
+        heroTitle1: "Practice interviews with",
+        heroTitle2: "real AI feedback",
+        heroSubtitle:
+          "Select your role, pick a difficulty, and face an AI interviewer that asks follow-up questions and scores your performance.",
+        languageLabel: "Language",
+        step1: "1. Choose Your Role",
+        step2: "2. Interview Type",
+        step3: "3. Select Difficulty",
+        customRoleLabel: "Custom Role",
+        customRoleSub: "Your role + CV + JD",
+        customRoleEdit: "Click to edit",
+        interviewTypes: [
+          { value: "hr" as InterviewType, icon: "🤝", label: "HR / Behavioral", description: "Communication, motivation, teamwork, culture fit" },
+          { value: "technical" as InterviewType, icon: "🧠", label: "Technical", description: "Technical knowledge, architecture, concepts, problem solving" },
+          { value: "practical" as InterviewType, icon: "💻", label: "Practical / Coding", description: "Live coding, assignments, real-world implementation, debugging" },
+        ],
+        difficulties: [
+          { value: "easy" as Difficulty, label: "Easy", description: "Fundamentals & concepts", color: DIFF_COLORS.easy },
+          { value: "medium" as Difficulty, label: "Medium", description: "Practical & mixed", color: DIFF_COLORS.medium },
+          { value: "hard" as Difficulty, label: "Hard", description: "Advanced & in-depth", color: DIFF_COLORS.hard },
+        ],
+        startBtn: "Start Interview →",
+        startingBtn: "Starting Interview…",
+        selectRoleHint: "Select a role to begin",
+        errorMsg: "Could not start the interview. Please try again.",
+        modalTitle: "Custom Role Setup",
+        modalRoleLabel: "Your Role / Job Title",
+        modalRolePlaceholder: "e.g. iOS Engineer, ML Engineer, Security Analyst…",
+        modalCvLabel: "CV / Resume",
+        modalOptional: "(optional)",
+        modalUploadFile: "Upload file",
+        modalChangeFile: "Change file",
+        modalReadingFile: "Reading file…",
+        modalCvPlaceholder: "Paste your CV or resume, or upload a PDF / DOCX / TXT file above…",
+        modalJdLabel: "Job Description",
+        modalJdPlaceholder: "Paste the job description so the AI focuses on the right skills…",
+        modalCancel: "Cancel",
+        modalConfirm: "Confirm",
+        howItWorks: "How it works",
+        howSteps: [
+          { step: "01", title: "Pick a role", desc: "Choose the job you want to practice for" },
+          { step: "02", title: "AI interviews you", desc: "Dynamic questions based on your role and level" },
+          { step: "03", title: "Answer naturally", desc: "Type your answers like in a real chat interview" },
+          { step: "04", title: "Get scored", desc: "Receive technical, communication & confidence scores" },
+        ],
+      };
 
   const isCustomSelected = customData !== null;
   const effectiveRole = customData?.role || selectedRole;
@@ -111,7 +209,7 @@ export default function HomePage() {
       const data = await res.json();
       router.push(`/interview/${data.id}`);
     } catch {
-      setError("Could not start the interview. Please try again.");
+      setError(t.errorMsg);
       setLoading(false);
     }
   }
@@ -125,12 +223,12 @@ export default function HomePage() {
             className="absolute inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setModalOpen(false)}
           />
-          <div className="relative z-10 w-full max-w-lg bg-zinc-900 border border-zinc-700 rounded-2xl p-6 shadow-2xl space-y-4">
+          <div className="relative z-10 w-full max-w-lg bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-2xl p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-zinc-100">Custom Role Setup</h3>
+              <h3 className="text-lg font-bold text-gray-900 dark:text-zinc-100">{t.modalTitle}</h3>
               <button
                 onClick={() => setModalOpen(false)}
-                className="text-zinc-500 hover:text-zinc-300 transition-colors"
+                className="text-gray-500 dark:text-zinc-500 hover:text-gray-800 dark:hover:text-zinc-300 transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -139,41 +237,41 @@ export default function HomePage() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-zinc-400 mb-1">
-                Your Role / Job Title <span className="text-red-400">*</span>
+              <label className="block text-xs font-bold text-gray-700 dark:text-zinc-400 mb-1 uppercase tracking-wide">
+                {t.modalRoleLabel} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={draftRole}
                 onChange={(e) => setDraftRole(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && confirmModal()}
-                placeholder="e.g. iOS Engineer, ML Engineer, Security Analyst…"
+                placeholder={t.modalRolePlaceholder}
                 autoFocus
-                className="w-full rounded-xl border border-zinc-700 bg-zinc-800 text-zinc-200 placeholder-zinc-600 text-sm px-3 py-2.5 focus:outline-none focus:border-violet-500 transition-colors"
+                className="w-full rounded-xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-200 placeholder-gray-400 dark:placeholder-zinc-600 text-sm px-3 py-2.5 focus:outline-none focus:border-violet-500 transition-colors"
               />
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label className="text-xs font-medium text-zinc-400">
-                  CV / Resume{" "}
-                  <span className="text-zinc-600 font-normal">(optional)</span>
+                <label className="text-xs font-bold text-gray-700 dark:text-zinc-400 uppercase tracking-wide">
+                  {t.modalCvLabel}{" "}
+                  <span className="text-gray-500 dark:text-zinc-600 font-normal normal-case">{t.modalOptional}</span>
                 </label>
-                <label className={`flex items-center gap-1.5 text-xs font-medium cursor-pointer transition-colors ${cvExtracting ? "text-zinc-600 pointer-events-none" : "text-violet-400 hover:text-violet-300"}`}>
+                <label className={`flex items-center gap-1.5 text-xs font-semibold cursor-pointer transition-colors ${cvExtracting ? "text-gray-400 dark:text-zinc-600 pointer-events-none" : "text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300"}`}>
                   {cvExtracting ? (
                     <>
                       <svg className="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                       </svg>
-                      Reading file…
+                      {t.modalReadingFile}
                     </>
                   ) : (
                     <>
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                       </svg>
-                      {cvFileName ? "Change file" : "Upload file"}
+                      {cvFileName ? t.modalChangeFile : t.modalUploadFile}
                     </>
                   )}
                   <input
@@ -186,12 +284,12 @@ export default function HomePage() {
               </div>
 
               {cvFileName && !cvExtracting && (
-                <div className="flex items-center gap-2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-violet-500/10 border border-violet-500/20">
-                  <svg className="w-3.5 h-3.5 text-violet-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <div className="flex items-center gap-2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-violet-50 dark:bg-violet-500/10 border border-violet-200 dark:border-violet-500/20">
+                  <svg className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
-                  <span className="text-xs text-violet-300 truncate">{cvFileName}</span>
-                  <button onClick={() => { setCvFileName(""); setDraftCv(""); }} className="ml-auto text-zinc-600 hover:text-zinc-400">
+                  <span className="text-xs text-violet-700 dark:text-violet-300 truncate font-medium">{cvFileName}</span>
+                  <button onClick={() => { setCvFileName(""); setDraftCv(""); }} className="ml-auto text-gray-500 dark:text-zinc-600 hover:text-gray-700 dark:hover:text-zinc-400">
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -200,45 +298,45 @@ export default function HomePage() {
               )}
 
               {cvFileError && (
-                <p className="text-xs text-red-400 mb-1.5">{cvFileError}</p>
+                <p className="text-xs text-red-600 dark:text-red-400 mb-1.5">{cvFileError}</p>
               )}
 
               <textarea
                 value={draftCv}
                 onChange={(e) => { setDraftCv(e.target.value); if (!e.target.value) setCvFileName(""); }}
-                placeholder="Paste your CV or resume, or upload a PDF / DOCX / TXT file above…"
+                placeholder={t.modalCvPlaceholder}
                 rows={4}
-                className="w-full rounded-xl border border-zinc-700 bg-zinc-800 text-zinc-200 placeholder-zinc-600 text-sm px-3 py-2 resize-y focus:outline-none focus:border-violet-500 transition-colors"
+                className="w-full rounded-xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-200 placeholder-gray-400 dark:placeholder-zinc-600 text-sm px-3 py-2 resize-y focus:outline-none focus:border-violet-500 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-zinc-400 mb-1">
-                Job Description{" "}
-                <span className="text-zinc-600 font-normal">(optional)</span>
+              <label className="block text-xs font-bold text-gray-700 dark:text-zinc-400 mb-1 uppercase tracking-wide">
+                {t.modalJdLabel}{" "}
+                <span className="text-gray-500 dark:text-zinc-600 font-normal normal-case">{t.modalOptional}</span>
               </label>
               <textarea
                 value={draftJd}
                 onChange={(e) => setDraftJd(e.target.value)}
-                placeholder="Paste the job description so the AI focuses on the right skills…"
+                placeholder={t.modalJdPlaceholder}
                 rows={4}
-                className="w-full rounded-xl border border-zinc-700 bg-zinc-800 text-zinc-200 placeholder-zinc-600 text-sm px-3 py-2 resize-y focus:outline-none focus:border-violet-500 transition-colors"
+                className="w-full rounded-xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-gray-900 dark:text-zinc-200 placeholder-gray-400 dark:placeholder-zinc-600 text-sm px-3 py-2 resize-y focus:outline-none focus:border-violet-500 transition-colors"
               />
             </div>
 
             <div className="flex gap-3 pt-1">
               <button
                 onClick={() => setModalOpen(false)}
-                className="flex-1 py-2.5 rounded-xl border border-zinc-700 text-zinc-400 text-sm font-medium hover:border-zinc-500 hover:text-zinc-200 transition-all"
+                className="flex-1 py-2.5 rounded-xl border border-gray-300 dark:border-zinc-700 text-gray-700 dark:text-zinc-400 text-sm font-semibold hover:border-gray-500 dark:hover:border-zinc-500 hover:text-gray-900 dark:hover:text-zinc-200 transition-all"
               >
-                Cancel
+                {t.modalCancel}
               </button>
               <button
                 onClick={confirmModal}
                 disabled={!draftRole.trim()}
-                className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-cyan-600 hover:from-violet-500 hover:to-cyan-500 text-white text-sm font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-cyan-600 hover:from-violet-500 hover:to-cyan-500 text-white text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
               >
-                Confirm
+                {t.modalConfirm}
               </button>
             </div>
           </div>
@@ -247,42 +345,42 @@ export default function HomePage() {
 
       {/* Hero */}
       <div className="text-center mb-12">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-violet-500/30 bg-violet-500/10 text-violet-300 text-sm mb-6">
-          <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-          AI-Powered Interview Coach
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-violet-400/40 bg-violet-50 dark:bg-violet-500/10 text-violet-700 dark:text-violet-300 text-sm font-semibold mb-6">
+          <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" />
+          {t.badge}
         </div>
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
-          Practice interviews with{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-400">
-            real AI feedback
+        <h1 className="text-4xl sm:text-5xl font-black tracking-tight mb-4 text-gray-900 dark:text-zinc-100">
+          {t.heroTitle1}{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-cyan-500 dark:from-violet-400 dark:to-cyan-400">
+            {t.heroTitle2}
           </span>
         </h1>
-        <p className="text-zinc-400 text-lg max-w-xl mx-auto">
-          Select your role, pick a difficulty, and face an AI interviewer that asks follow-up questions and scores your performance.
+        <p className="text-gray-600 dark:text-zinc-400 text-lg max-w-xl mx-auto font-medium">
+          {t.heroSubtitle}
         </p>
       </div>
 
       <div className="w-full max-w-3xl space-y-8">
         {/* Language selector */}
-        <div className="flex items-center justify-center gap-2">
-          <span className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Language</span>
-          <div className="flex rounded-xl overflow-hidden border border-zinc-700 bg-zinc-900">
+        <div className="flex items-center justify-center gap-3">
+          <span className="text-xs text-gray-600 dark:text-zinc-500 uppercase tracking-wider font-bold">{t.languageLabel}</span>
+          <div className="flex rounded-xl overflow-hidden border border-gray-300 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900">
             <button
               onClick={() => setLanguage("en")}
-              className={`flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-bold transition-all ${
                 language === "en"
                   ? "bg-violet-600 text-white"
-                  : "text-zinc-400 hover:text-zinc-200"
+                  : "text-gray-700 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-800"
               }`}
             >
               🇬🇧 English
             </button>
             <button
               onClick={() => setLanguage("de")}
-              className={`flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-bold transition-all ${
                 language === "de"
                   ? "bg-violet-600 text-white"
-                  : "text-zinc-400 hover:text-zinc-200"
+                  : "text-gray-700 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-800"
               }`}
             >
               🇩🇪 Deutsch
@@ -292,8 +390,8 @@ export default function HomePage() {
 
         {/* Role selection */}
         <section>
-          <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">
-            1. Choose Your Role
+          <h2 className="text-sm font-black text-gray-700 dark:text-zinc-400 uppercase tracking-wider mb-3">
+            {t.step1}
           </h2>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -303,13 +401,13 @@ export default function HomePage() {
                 onClick={() => { setSelectedRole(r.label as InterviewRole); setCustomData(null); }}
                 className={`flex flex-col items-start gap-1 p-3 rounded-xl border text-left transition-all ${
                   selectedRole === r.label
-                    ? "border-violet-500 bg-violet-500/15 text-white"
-                    : "border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+                    ? "border-violet-500 bg-violet-50 dark:bg-violet-500/15 text-gray-900 dark:text-white shadow-sm shadow-violet-200 dark:shadow-none"
+                    : "border-gray-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-gray-800 dark:text-zinc-400 hover:border-violet-400 dark:hover:border-zinc-600 hover:bg-violet-50/50 dark:hover:text-zinc-200"
                 }`}
               >
                 <span className="text-2xl">{r.icon}</span>
-                <span className="text-sm font-medium leading-tight">{r.label}</span>
-                <span className="text-xs text-zinc-500 leading-tight">{r.description}</span>
+                <span className="text-sm font-bold leading-tight">{r.label}</span>
+                <span className="text-xs text-gray-500 dark:text-zinc-500 leading-tight font-medium">{r.description}</span>
               </button>
             ))}
 
@@ -318,16 +416,16 @@ export default function HomePage() {
               onClick={openModal}
               className={`flex flex-col items-start gap-1 p-3 rounded-xl border text-left transition-all ${
                 isCustomSelected
-                  ? "border-violet-500 bg-violet-500/15 text-white"
-                  : "border-dashed border-zinc-700 bg-zinc-900/50 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200"
+                  ? "border-violet-500 bg-violet-50 dark:bg-violet-500/15 text-gray-900 dark:text-white shadow-sm shadow-violet-200 dark:shadow-none"
+                  : "border-dashed border-gray-400 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900/50 text-gray-700 dark:text-zinc-400 hover:border-violet-400 dark:hover:border-zinc-500 hover:bg-violet-50/50 dark:hover:text-zinc-200"
               }`}
             >
               <span className="text-2xl">✏️</span>
-              <span className="text-sm font-medium leading-tight">
-                {isCustomSelected ? customData!.role : "Custom Role"}
+              <span className="text-sm font-bold leading-tight">
+                {isCustomSelected ? customData!.role : t.customRoleLabel}
               </span>
-              <span className="text-xs text-zinc-500 leading-tight">
-                {isCustomSelected ? "Click to edit" : "Your role + CV + JD"}
+              <span className="text-xs text-gray-500 dark:text-zinc-500 leading-tight font-medium">
+                {isCustomSelected ? t.customRoleEdit : t.customRoleSub}
               </span>
             </button>
           </div>
@@ -335,42 +433,23 @@ export default function HomePage() {
 
         {/* Interview Type */}
         <section>
-          <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">
-            2. Interview Type
+          <h2 className="text-sm font-black text-gray-700 dark:text-zinc-400 uppercase tracking-wider mb-3">
+            {t.step2}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {[
-              {
-                value: "hr" as InterviewType,
-                icon: "🤝",
-                label: "HR / Behavioral",
-                description: "Communication, motivation, teamwork, culture fit",
-              },
-              {
-                value: "technical" as InterviewType,
-                icon: "🧠",
-                label: "Technical",
-                description: "Technical knowledge, architecture, concepts, problem solving",
-              },
-              {
-                value: "practical" as InterviewType,
-                icon: "💻",
-                label: "Practical / Coding",
-                description: "Live coding, assignments, real-world implementation, debugging",
-              },
-            ].map((t) => (
+            {t.interviewTypes.map((itype) => (
               <button
-                key={t.value}
-                onClick={() => setInterviewType(t.value)}
+                key={itype.value}
+                onClick={() => setInterviewType(itype.value)}
                 className={`flex flex-col items-start gap-1.5 p-4 rounded-xl border text-left transition-all ${
-                  interviewType === t.value
-                    ? "border-violet-500 bg-violet-500/15 text-white"
-                    : "border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+                  interviewType === itype.value
+                    ? "border-violet-500 bg-violet-50 dark:bg-violet-500/15 text-gray-900 dark:text-white shadow-sm shadow-violet-200 dark:shadow-none"
+                    : "border-gray-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-gray-800 dark:text-zinc-400 hover:border-violet-400 dark:hover:border-zinc-600 hover:bg-violet-50/50 dark:hover:text-zinc-200"
                 }`}
               >
-                <span className="text-2xl">{t.icon}</span>
-                <span className="text-sm font-semibold leading-tight">{t.label}</span>
-                <span className="text-xs text-zinc-500 leading-snug">{t.description}</span>
+                <span className="text-2xl">{itype.icon}</span>
+                <span className="text-sm font-bold leading-tight">{itype.label}</span>
+                <span className="text-xs text-gray-500 dark:text-zinc-500 leading-snug font-medium">{itype.description}</span>
               </button>
             ))}
           </div>
@@ -378,22 +457,22 @@ export default function HomePage() {
 
         {/* Difficulty selection */}
         <section>
-          <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">
-            3. Select Difficulty
+          <h2 className="text-sm font-black text-gray-700 dark:text-zinc-400 uppercase tracking-wider mb-3">
+            {t.step3}
           </h2>
           <div className="flex gap-3">
-            {DIFFICULTIES.map((d) => (
+            {t.difficulties.map((d) => (
               <button
                 key={d.value}
                 onClick={() => setSelectedDifficulty(d.value)}
-                className={`flex-1 flex flex-col items-center gap-1 p-4 rounded-xl border font-medium transition-all ${
+                className={`flex-1 flex flex-col items-center gap-1 p-4 rounded-xl border font-bold transition-all ${
                   selectedDifficulty === d.value
                     ? d.color + " border-current"
-                    : "border-zinc-800 bg-zinc-900 text-zinc-500 hover:border-zinc-600 hover:text-zinc-300"
+                    : "border-gray-300 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-gray-700 dark:text-zinc-500 hover:border-gray-400 dark:hover:border-zinc-600 hover:text-gray-900 dark:hover:text-zinc-300"
                 }`}
               >
                 <span className="text-base">{d.label}</span>
-                <span className="text-xs font-normal opacity-70">{d.description}</span>
+                <span className="text-xs font-medium opacity-80">{d.description}</span>
               </button>
             ))}
           </div>
@@ -401,14 +480,14 @@ export default function HomePage() {
 
         {/* Error */}
         {error && (
-          <p className="text-red-400 text-sm text-center">{error}</p>
+          <p className="text-red-600 dark:text-red-400 text-sm text-center font-semibold">{error}</p>
         )}
 
         {/* Start button */}
         <button
           onClick={startInterview}
           disabled={!effectiveRole || loading}
-          className="w-full py-4 rounded-xl font-semibold text-base transition-all disabled:opacity-40 disabled:cursor-not-allowed bg-gradient-to-r from-violet-600 to-cyan-600 hover:from-violet-500 hover:to-cyan-500 text-white shadow-lg shadow-violet-900/30"
+          className="w-full py-4 rounded-xl font-black text-base transition-all disabled:opacity-40 disabled:cursor-not-allowed bg-gradient-to-r from-violet-600 to-cyan-600 hover:from-violet-500 hover:to-cyan-500 text-white shadow-lg shadow-violet-500/25"
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">
@@ -416,34 +495,29 @@ export default function HomePage() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
               </svg>
-              Starting Interview…
+              {t.startingBtn}
             </span>
           ) : (
-            "Start Interview →"
+            t.startBtn
           )}
         </button>
 
         {!effectiveRole && (
-          <p className="text-zinc-600 text-sm text-center -mt-4">Select a role to begin</p>
+          <p className="text-gray-500 dark:text-zinc-600 text-sm text-center font-medium -mt-4">{t.selectRoleHint}</p>
         )}
       </div>
 
       {/* How it works */}
       <div className="mt-20 w-full max-w-3xl">
-        <h2 className="text-center text-sm font-semibold text-zinc-500 uppercase tracking-wider mb-8">
-          How it works
+        <h2 className="text-center text-sm font-black text-gray-600 dark:text-zinc-500 uppercase tracking-widest mb-10">
+          {t.howItWorks}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 text-center">
-          {[
-            { step: "01", title: "Pick a role", desc: "Choose the job you want to practice for" },
-            { step: "02", title: "AI interviews you", desc: "Dynamic questions based on your role and level" },
-            { step: "03", title: "Answer naturally", desc: "Type your answers like in a real chat interview" },
-            { step: "04", title: "Get scored", desc: "Receive technical, communication & confidence scores" },
-          ].map((item) => (
+          {t.howSteps.map((item) => (
             <div key={item.step} className="flex flex-col items-center gap-2">
-              <span className="text-2xl font-bold text-zinc-700">{item.step}</span>
-              <span className="font-semibold text-zinc-300 text-sm">{item.title}</span>
-              <span className="text-xs text-zinc-500">{item.desc}</span>
+              <span className="text-3xl font-black text-violet-200 dark:text-zinc-800">{item.step}</span>
+              <span className="font-black text-gray-900 dark:text-zinc-200 text-sm">{item.title}</span>
+              <span className="text-sm text-gray-600 dark:text-zinc-500 font-medium leading-snug">{item.desc}</span>
             </div>
           ))}
         </div>

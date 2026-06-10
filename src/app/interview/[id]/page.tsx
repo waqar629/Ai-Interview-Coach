@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, use } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import type { Message } from "@/types";
 
 interface PageProps {
@@ -178,7 +179,6 @@ export default function InterviewPage({ params }: PageProps) {
       isListeningRef.current = false;
       recognitionRef.current?.stop();
       setIsListening(false);
-      // Set final clean transcript
       setInput(finalTranscriptRef.current);
       setTimeout(() => {
         const ta = textareaRef.current;
@@ -223,7 +223,6 @@ export default function InterviewPage({ params }: PageProps) {
       }, 0);
     };
 
-    // Restart automatically if browser stops mid-session (pauses cause onend to fire)
     recognition.onend = () => {
       if (isListeningRef.current) {
         try { recognition.start(); } catch { /* ignore */ }
@@ -247,7 +246,7 @@ export default function InterviewPage({ params }: PageProps) {
       <div className="flex-1 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-2 border-violet-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-zinc-500 text-sm">Loading interview…</p>
+          <p className="text-gray-500 dark:text-zinc-500 text-sm">Loading interview…</p>
         </div>
       </div>
     );
@@ -257,8 +256,8 @@ export default function InterviewPage({ params }: PageProps) {
     return (
       <div className="flex-1 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-400 mb-4">{error}</p>
-          <button onClick={() => router.push("/")} className="text-violet-400 hover:underline">
+          <p className="text-red-500 dark:text-red-400 mb-4">{error}</p>
+          <button onClick={() => router.push("/")} className="text-violet-600 dark:text-violet-400 hover:underline">
             ← Back to Home
           </button>
         </div>
@@ -267,46 +266,46 @@ export default function InterviewPage({ params }: PageProps) {
   }
 
   const difficultyColor = {
-    easy: "text-emerald-400",
-    medium: "text-amber-400",
-    hard: "text-red-400",
-  }[interview?.difficulty ?? "medium"] ?? "text-zinc-400";
+    easy: "text-emerald-600 dark:text-emerald-400",
+    medium: "text-amber-600 dark:text-amber-400",
+    hard: "text-red-600 dark:text-red-400",
+  }[interview?.difficulty ?? "medium"] ?? "text-gray-500 dark:text-zinc-400";
 
   return (
     <div className="flex-1 flex flex-col h-screen">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-10">
+      <header className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-zinc-800 bg-white/90 dark:bg-zinc-950/80 backdrop-blur sticky top-0 z-10">
         <div className="flex items-center gap-3">
           <button
             onClick={() => router.push("/")}
-            className="text-zinc-500 hover:text-zinc-300 transition-colors text-sm"
+            className="text-gray-500 dark:text-zinc-500 hover:text-gray-800 dark:hover:text-zinc-300 transition-colors text-sm"
           >
             ← Home
           </button>
-          <div className="w-px h-4 bg-zinc-700" />
+          <div className="w-px h-4 bg-gray-200 dark:bg-zinc-700" />
           <div>
-            <span className="font-semibold text-sm text-zinc-200">{interview?.role}</span>
+            <span className="font-semibold text-sm text-gray-800 dark:text-zinc-200">{interview?.role}</span>
             <span className={`ml-2 text-xs font-medium capitalize ${difficultyColor}`}>
               {interview?.difficulty}
             </span>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-xs text-zinc-500">{questionCount} questions</span>
+          <span className="text-xs text-gray-500 dark:text-zinc-500">{questionCount} questions</span>
 
           {/* Mute / unmute TTS */}
           <button
             onClick={toggleMute}
             title={isMuted ? "Unmute AI voice" : "Mute AI voice"}
-            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-zinc-800 hover:bg-zinc-700"
+            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700"
           >
             {isMuted ? (
-              <svg className="w-4 h-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-4 h-4 text-gray-400 dark:text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
               </svg>
             ) : (
-              <svg className="w-4 h-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-4 h-4 text-violet-500 dark:text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M12 6v12m-3.536-9.536a5 5 0 000 7.072M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
               </svg>
             )}
@@ -315,7 +314,7 @@ export default function InterviewPage({ params }: PageProps) {
           <button
             onClick={endInterview}
             disabled={ending || messages.length < 2}
-            className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-gray-700 dark:text-zinc-300 text-xs font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {ending ? "Generating results…" : "End & Get Results"}
           </button>
@@ -326,18 +325,24 @@ export default function InterviewPage({ params }: PageProps) {
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 max-w-3xl w-full mx-auto">
         {messages.map((msg) => (
           <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0 ${
-                msg.role === "assistant" ? "bg-violet-600 text-white" : "bg-zinc-700 text-zinc-300"
-              }`}
-            >
-              {msg.role === "assistant" ? "AI" : "You"}
-            </div>
+            {/* Avatar */}
+            {msg.role === "assistant" ? (
+              <div className="w-9 h-9 rounded-full flex-shrink-0 bg-gradient-to-br from-violet-600 to-cyan-600 flex items-center justify-center shadow-sm">
+                <span className="text-white font-black text-xs">Alex</span>
+              </div>
+            ) : (
+              <div className="w-9 h-9 rounded-full flex-shrink-0 overflow-hidden ring-2 ring-violet-400/40 shadow-sm">
+                <Image src="/avatar.jpg" alt="Hassan" width={36} height={36} className="w-full h-full" style={{ objectFit: "cover", objectPosition: "center 10%" }} />
+              </div>
+            )}
             <div className="flex flex-col gap-1 max-w-[80%]">
+              <span className={`text-xs font-bold ${msg.role === "assistant" ? "text-violet-600 dark:text-violet-400" : "text-right text-gray-500 dark:text-zinc-500"}`}>
+                {msg.role === "assistant" ? "Alex (AI Interviewer)" : "Hassan"}
+              </span>
               <div
                 className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                   msg.role === "assistant"
-                    ? "bg-zinc-800 text-zinc-100 rounded-tl-sm"
+                    ? "bg-gray-100 dark:bg-zinc-800 text-gray-800 dark:text-zinc-100 rounded-tl-sm"
                     : "bg-violet-600 text-white rounded-tr-sm"
                 }`}
               >
@@ -353,7 +358,7 @@ export default function InterviewPage({ params }: PageProps) {
                     u.lang = interview?.language === "de" ? "de-DE" : "en-US";
                     window.speechSynthesis.speak(u);
                   }}
-                  className="self-start flex items-center gap-1 text-xs text-zinc-600 hover:text-violet-400 transition-colors"
+                  className="self-start flex items-center gap-1 text-xs text-gray-400 dark:text-zinc-600 hover:text-violet-600 dark:hover:text-violet-400 transition-colors"
                 >
                   <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M12 6v12m-3.536-9.536a5 5 0 000 7.072M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
@@ -367,14 +372,14 @@ export default function InterviewPage({ params }: PageProps) {
 
         {sending && (
           <div className="flex gap-3">
-            <div className="w-8 h-8 rounded-full bg-violet-600 flex items-center justify-center text-sm text-white flex-shrink-0">
-              AI
+            <div className="w-9 h-9 rounded-full flex-shrink-0 bg-gradient-to-br from-violet-600 to-cyan-600 flex items-center justify-center shadow-sm">
+              <span className="text-white font-black text-xs">Alex</span>
             </div>
-            <div className="bg-zinc-800 rounded-2xl rounded-tl-sm px-4 py-3">
+            <div className="bg-gray-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm px-4 py-3">
               <div className="flex gap-1 items-center h-5">
-                <span className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                <span className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                <span className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce" />
+                <span className="w-1.5 h-1.5 bg-gray-400 dark:bg-zinc-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                <span className="w-1.5 h-1.5 bg-gray-400 dark:bg-zinc-400 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                <span className="w-1.5 h-1.5 bg-gray-400 dark:bg-zinc-400 rounded-full animate-bounce" />
               </div>
             </div>
           </div>
@@ -382,8 +387,8 @@ export default function InterviewPage({ params }: PageProps) {
 
         {ending && (
           <div className="text-center py-4">
-            <div className="inline-flex items-center gap-2 text-violet-400 text-sm">
-              <div className="w-4 h-4 border-2 border-violet-400 border-t-transparent rounded-full animate-spin" />
+            <div className="inline-flex items-center gap-2 text-violet-600 dark:text-violet-400 text-sm">
+              <div className="w-4 h-4 border-2 border-violet-500 dark:border-violet-400 border-t-transparent rounded-full animate-spin" />
               Generating your evaluation report…
             </div>
           </div>
@@ -395,14 +400,14 @@ export default function InterviewPage({ params }: PageProps) {
       {/* Error toast */}
       {error && (
         <div className="mx-4 mb-2 max-w-3xl w-full mx-auto">
-          <p className="text-red-400 text-sm text-center bg-red-900/20 border border-red-800/30 rounded-lg px-4 py-2">
+          <p className="text-red-500 dark:text-red-400 text-sm text-center bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/30 rounded-lg px-4 py-2">
             {error}
           </p>
         </div>
       )}
 
       {/* Input */}
-      <div className="border-t border-zinc-800 px-4 py-3 bg-zinc-950/80 backdrop-blur">
+      <div className="border-t border-gray-200 dark:border-zinc-800 px-4 py-3 bg-white/90 dark:bg-zinc-950/80 backdrop-blur">
         <div className="max-w-3xl mx-auto flex gap-2 items-end">
           {/* Mic button */}
           {speechSupported && (
@@ -413,7 +418,7 @@ export default function InterviewPage({ params }: PageProps) {
               className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
                 isListening
                   ? "bg-red-500 hover:bg-red-400 animate-pulse"
-                  : "bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200"
+                  : "bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 text-gray-500 dark:text-zinc-400 hover:text-gray-800 dark:hover:text-zinc-200"
               }`}
             >
               {isListening ? (
@@ -442,7 +447,7 @@ export default function InterviewPage({ params }: PageProps) {
             }
             rows={1}
             disabled={sending || ending}
-            className="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 resize-none focus:outline-none focus:border-violet-500 transition-colors disabled:opacity-50"
+            className="flex-1 bg-gray-50 dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm text-gray-800 dark:text-zinc-100 placeholder-gray-400 dark:placeholder-zinc-500 resize-none focus:outline-none focus:border-violet-500 transition-colors disabled:opacity-50"
             style={{ minHeight: "48px", maxHeight: "160px" }}
           />
 
@@ -458,9 +463,9 @@ export default function InterviewPage({ params }: PageProps) {
           </button>
         </div>
 
-        <p className="text-xs text-zinc-600 text-center mt-2">
+        <p className="text-xs text-gray-400 dark:text-zinc-600 text-center mt-2">
           {isListening ? (
-            <span className="text-red-400 animate-pulse">● Recording — speak now, then click stop</span>
+            <span className="text-red-500 dark:text-red-400 animate-pulse">● Recording — speak now, then click stop</span>
           ) : (
             "AI speaks each question aloud — use the mic button to reply by voice"
           )}

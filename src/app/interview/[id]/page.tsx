@@ -28,8 +28,25 @@ export default function InterviewPage({ params }: PageProps) {
   const [ending, setEnding] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [questionCount, setQuestionCount] = useState(0);
+
+  // Audio state
+  const [isMuted, setIsMuted] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [speechSupported, setSpeechSupported] = useState(false);
+  const isMutedRef = useRef(false);
+  const lastSpokenIdRef = useRef<string>("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    setSpeechSupported(
+      typeof window !== "undefined" &&
+        ("SpeechRecognition" in window || "webkitSpeechRecognition" in window)
+    );
+  }, []);
 
   useEffect(() => {
     fetchInterview();
@@ -38,6 +55,29 @@ export default function InterviewPage({ params }: PageProps) {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Speak new AI messages automatically
+  useEffect(() => {
+    const lastMsg = messages[messages.length - 1];
+    if (!lastMsg || lastMsg.role !== "assistant") return;
+    if (lastMsg.id === lastSpokenIdRef.current) return;
+    lastSpokenIdRef.current = lastMsg.id;
+    if (isMutedRef.current || typeof window === "undefined") return;
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(lastMsg.content);
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
+  }, [messages]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis?.cancel();
+      recognitionRef.current?.stop();
+    };
+  }, []);
 
   async function fetchInterview() {
     try {
@@ -59,6 +99,7 @@ export default function InterviewPage({ params }: PageProps) {
     const userMessage = input.trim();
     setInput("");
     setSending(true);
+    if (textareaRef.current) textareaRef.current.style.height = "48px";
 
     const tempUserMsg: Message = {
       id: crypto.randomUUID(),
@@ -84,9 +125,7 @@ export default function InterviewPage({ params }: PageProps) {
       ]);
       setQuestionCount((q) => q + 1);
 
-      if (data.interviewComplete) {
-        endInterview();
-      }
+      if (data.interviewComplete) endInterview();
     } catch {
       setMessages((prev) => prev.filter((m) => m.id !== tempUserMsg.id));
       setError("Failed to send message. Please try again.");
@@ -121,6 +160,56 @@ export default function InterviewPage({ params }: PageProps) {
       ta.style.height = "auto";
       ta.style.height = Math.min(ta.scrollHeight, 160) + "px";
     }
+  }
+
+  function toggleMute() {
+    const next = !isMuted;
+    setIsMuted(next);
+    isMutedRef.current = next;
+    if (next) window.speechSynthesis.cancel();
+  }
+
+  function toggleListening() {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SR) return;
+
+    const recognition = new SR();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    recognition.onresult = (event: any) => {
+      const transcript: string = event.results[0][0].transcript;
+      setInput((prev) => (prev ? prev + " " + transcript : transcript));
+      setTimeout(() => {
+        const ta = textareaRef.current;
+        if (ta) {
+          ta.style.height = "auto";
+          ta.style.height = Math.min(ta.scrollHeight, 160) + "px";
+        }
+      }, 0);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+      recognitionRef.current = null;
+    };
+
+    recognition.onerror = () => {
+      setIsListening(false);
+      recognitionRef.current = null;
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+    setIsListening(true);
   }
 
   if (loading) {
@@ -174,6 +263,25 @@ export default function InterviewPage({ params }: PageProps) {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-xs text-zinc-500">{questionCount} questions</span>
+
+          {/* Mute / unmute TTS */}
+          <button
+            onClick={toggleMute}
+            title={isMuted ? "Unmute AI voice" : "Mute AI voice"}
+            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors bg-zinc-800 hover:bg-zinc-700"
+          >
+            {isMuted ? (
+              <svg className="w-4 h-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+              </svg>
+            ) : (
+              <svg className="w-4 h-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M12 6v12m-3.536-9.536a5 5 0 000 7.072M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+              </svg>
+            )}
+          </button>
+
           <button
             onClick={endInterview}
             disabled={ending || messages.length < 2}
@@ -187,29 +295,41 @@ export default function InterviewPage({ params }: PageProps) {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 max-w-3xl w-full mx-auto">
         {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
-          >
-            {/* Avatar */}
+          <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center text-sm flex-shrink-0 ${
-                msg.role === "assistant"
-                  ? "bg-violet-600 text-white"
-                  : "bg-zinc-700 text-zinc-300"
+                msg.role === "assistant" ? "bg-violet-600 text-white" : "bg-zinc-700 text-zinc-300"
               }`}
             >
               {msg.role === "assistant" ? "AI" : "You"}
             </div>
-            {/* Bubble */}
-            <div
-              className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                msg.role === "assistant"
-                  ? "bg-zinc-800 text-zinc-100 rounded-tl-sm"
-                  : "bg-violet-600 text-white rounded-tr-sm"
-              }`}
-            >
-              {msg.content}
+            <div className="flex flex-col gap-1 max-w-[80%]">
+              <div
+                className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                  msg.role === "assistant"
+                    ? "bg-zinc-800 text-zinc-100 rounded-tl-sm"
+                    : "bg-violet-600 text-white rounded-tr-sm"
+                }`}
+              >
+                {msg.content}
+              </div>
+              {/* Replay button on AI messages */}
+              {msg.role === "assistant" && (
+                <button
+                  onClick={() => {
+                    window.speechSynthesis.cancel();
+                    const u = new SpeechSynthesisUtterance(msg.content);
+                    u.rate = 0.95;
+                    window.speechSynthesis.speak(u);
+                  }}
+                  className="self-start flex items-center gap-1 text-xs text-zinc-600 hover:text-violet-400 transition-colors"
+                >
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M12 6v12m-3.536-9.536a5 5 0 000 7.072M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                  </svg>
+                  Replay
+                </button>
+              )}
             </div>
           </div>
         ))}
@@ -252,18 +372,50 @@ export default function InterviewPage({ params }: PageProps) {
 
       {/* Input */}
       <div className="border-t border-zinc-800 px-4 py-3 bg-zinc-950/80 backdrop-blur">
-        <div className="max-w-3xl mx-auto flex gap-3 items-end">
+        <div className="max-w-3xl mx-auto flex gap-2 items-end">
+          {/* Mic button */}
+          {speechSupported && (
+            <button
+              onClick={toggleListening}
+              disabled={sending || ending}
+              title={isListening ? "Stop recording" : "Speak your answer"}
+              className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all disabled:opacity-40 disabled:cursor-not-allowed ${
+                isListening
+                  ? "bg-red-500 hover:bg-red-400 animate-pulse"
+                  : "bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200"
+              }`}
+            >
+              {isListening ? (
+                <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <rect x="6" y="6" width="12" height="12" rx="2" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+              )}
+            </button>
+          )}
+
           <textarea
             ref={textareaRef}
             value={input}
             onChange={autoResize}
             onKeyDown={handleKeyDown}
-            placeholder="Type your answer… (Enter to send, Shift+Enter for new line)"
+            placeholder={
+              isListening
+                ? "Listening… speak your answer"
+                : speechSupported
+                ? "Type or use the mic to answer… (Enter to send)"
+                : "Type your answer… (Enter to send)"
+            }
             rows={1}
             disabled={sending || ending}
             className="flex-1 bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-100 placeholder-zinc-500 resize-none focus:outline-none focus:border-violet-500 transition-colors disabled:opacity-50"
             style={{ minHeight: "48px", maxHeight: "160px" }}
           />
+
+          {/* Send button */}
           <button
             onClick={sendMessage}
             disabled={!input.trim() || sending || ending}
@@ -274,8 +426,13 @@ export default function InterviewPage({ params }: PageProps) {
             </svg>
           </button>
         </div>
+
         <p className="text-xs text-zinc-600 text-center mt-2">
-          Answer honestly — the AI will ask follow-up questions based on your response
+          {isListening ? (
+            <span className="text-red-400 animate-pulse">● Recording — speak now, then click stop</span>
+          ) : (
+            "AI speaks each question aloud — use the mic button to reply by voice"
+          )}
         </p>
       </div>
     </div>

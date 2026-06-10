@@ -22,6 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={geist.variable} suppressHydrationWarning>
+      <head>
+        {/* Set theme before first paint to prevent flash */}
+        <script dangerouslySetInnerHTML={{ __html: `try{document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark')}catch(e){document.documentElement.setAttribute('data-theme','dark')}` }} />
+      </head>
       <body className="min-h-full flex flex-col bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100 antialiased font-[family-name:var(--font-geist)] transition-colors duration-200">
         <ThemeProvider>
           {/* Global top bar with theme toggle */}

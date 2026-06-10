@@ -23,7 +23,7 @@ export function FloatingContact() {
       {open && (
         <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-2xl shadow-2xl w-64 overflow-hidden">
           {/* Gradient header banner */}
-          <div className="bg-gradient-to-br from-violet-600 to-cyan-600 h-16 relative">
+          <div className="bg-gradient-to-br from-violet-600 to-cyan-600 h-20 relative">
             <button
               onClick={() => setOpen(false)}
               className="absolute top-3 right-3 text-white/70 hover:text-white transition-colors"
@@ -35,15 +35,15 @@ export function FloatingContact() {
           </div>
 
           {/* Avatar overlapping header */}
-          <div className="flex flex-col items-center -mt-8 px-5 pb-5">
-            <div className="w-16 h-16 rounded-full border-2 border-white dark:border-zinc-900 shadow-lg overflow-hidden ring-2 ring-violet-500/30 mb-3">
+          <div className="flex flex-col items-center -mt-12 px-5 pb-5">
+            <div className="w-24 h-24 rounded-full border-4 border-white dark:border-zinc-900 shadow-lg overflow-hidden ring-2 ring-violet-500/30 mb-3">
               <Image
                 src="/avatar.jpg"
                 alt="Waqar Hassan"
-                width={64}
-                height={64}
+                width={96}
+                height={96}
                 className="w-full h-full"
-                style={{ objectFit: "cover", objectPosition: "center 10%" }}
+                style={{ objectFit: "cover", objectPosition: "center 25%" }}
               />
             </div>
             <p className="font-black text-gray-900 dark:text-zinc-100 text-base">Waqar Hassan</p>
@@ -108,7 +108,7 @@ export function FloatingContact() {
           width={56}
           height={56}
           className="w-full h-full"
-          style={{ objectFit: "cover", objectPosition: "center 10%" }}
+          style={{ objectFit: "cover", objectPosition: "center 25%" }}
         />
       </button>
     </div>

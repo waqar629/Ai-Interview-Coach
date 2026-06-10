@@ -332,7 +332,7 @@ export default function InterviewPage({ params }: PageProps) {
               </div>
             ) : (
               <div className="w-9 h-9 rounded-full flex-shrink-0 overflow-hidden ring-2 ring-violet-400/40 shadow-sm">
-                <Image src="/avatar.jpg" alt="Hassan" width={36} height={36} className="w-full h-full" style={{ objectFit: "cover", objectPosition: "center 10%" }} />
+                <Image src="/avatar.jpg" alt="Hassan" width={36} height={36} className="w-full h-full" style={{ objectFit: "cover", objectPosition: "center 25%" }} />
               </div>
             )}
             <div className="flex flex-col gap-1 max-w-[80%]">

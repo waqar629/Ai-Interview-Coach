@@ -7,17 +7,17 @@ const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export async function POST(request: NextRequest) {
   try {
-    const { role, difficulty = "medium", context, language = "en" } = await request.json();
+    const { role, difficulty = "medium", context, language = "en", interviewType = "technical" } = await request.json();
 
     if (!role) {
       return Response.json({ error: "Role is required" }, { status: 400 });
     }
 
     const interview = await prisma.interview.create({
-      data: { role, difficulty, status: "in_progress", context: context || null, language },
+      data: { role, difficulty, status: "in_progress", context: context || null, language, interviewType },
     });
 
-    const systemPrompt = getSystemPrompt(role, difficulty, context, language);
+    const systemPrompt = getSystemPrompt(role, difficulty, context, language, interviewType);
     const greeting = language === "de" ? "Hallo, ich bin bereit zu beginnen." : "Hello, I'm ready to start.";
 
     const response = await groq.chat.completions.create({

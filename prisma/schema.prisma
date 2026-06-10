@@ -12,8 +12,9 @@ model Interview {
   role        String
   difficulty  String    @default("medium")
   status      String    @default("in_progress")
-  context     String?
-  language    String    @default("en")
+  context       String?
+  language      String    @default("en")
+  interviewType String    @default("technical")
   createdAt   DateTime  @default(now())
   completedAt DateTime?
   messages    Message[]

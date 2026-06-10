@@ -44,7 +44,8 @@ export async function POST(
       interview.role,
       interview.difficulty,
       interview.context ?? undefined,
-      interview.language ?? "en"
+      interview.language ?? "en",
+      interview.interviewType ?? "technical"
     );
 
     const history = interview.messages.map((m) => ({

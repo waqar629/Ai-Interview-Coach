@@ -1,24 +1,26 @@
-# AI Interview Platform
+# Hassan's AI Interview Coach
 
-A mock interview tool that actually knows who you are. Paste your CV and the job description before you start, and the AI asks questions relevant to *your* background — not just generic "what's your greatest weakness" fluff.
+A personal AI-powered mock interview platform built by **Waqar Hassan**. Pick a role, choose your interview type and difficulty, and face a realistic AI interviewer that asks follow-up questions and scores your performance — all for free.
 
-Built with Next.js, Prisma (SQLite), and Google Gemini. Runs entirely on your machine. The only external call is to Gemini's API, which has a generous free tier — no credit card, no monthly bill.
+Live at: [waqar-ai-coach.vercel.app](https://waqar-ai-coach.vercel.app)
 
 ---
 
 ## Why I built this
 
-Most mock interview tools are static. They cycle through the same question bank regardless of whether you're a fresh graduate or a ten-year senior. This one reads your actual CV and the job description before the interview starts, so the questions feel like they came from a recruiter who actually read your application.
+Most interview prep tools throw the same recycled question bank at everyone. This one actually adapts — paste your CV and the job description, and the AI asks questions relevant to *your* background and *that specific role*. It also supports full HR/behavioral, technical, and practical interview modes so you can practice the type of interview you're actually walking into.
 
 ---
 
-## What it does
+## Features
 
-- Pick a role (Frontend, Backend, Full Stack, DevOps, Data Scientist, React, Mobile, or define your own)
-- Optionally paste your CV and the job description — the AI uses both to personalise the questions
-- Choose difficulty: Easy for revision, Medium for typical interviews, Hard for senior/staff-level prep
-- The AI conducts a real back-and-forth interview — one question at a time, follow-ups included
-- When it's done, you get a proper evaluation: technical score, communication score, confidence score, strengths, weaknesses, and concrete suggestions
+- **Three interview types** — HR/Behavioral (soft skills, motivation, culture fit), Technical (architecture, concepts, depth), and Practical/Coding (live implementation, debugging, real-world tradeoffs)
+- **Seven preset roles** — Frontend, React, Backend, Full Stack, DevOps, Data Scientist, Mobile Developer — plus a **Custom Role** option where you can paste your own CV and job description
+- **Three difficulty levels** — Easy (fundamentals), Medium (mixed), Hard (senior/staff depth)
+- **Voice input and text-to-speech** — speak your answers, hear the questions read aloud; mute the voice when you don't need it
+- **English and German** — full bilingual support; switch language before starting and the AI conducts the entire interview in your chosen language, with all UI text switching too
+- **Dark mode by default** — no flash, no flicker; the page loads dark from the very first paint
+- **Evaluation on completion** — technical, communication, and confidence scores; specific strengths and weaknesses; actionable improvement suggestions
 
 ---
 
@@ -26,84 +28,89 @@ Most mock interview tools are static. They cycle through the same question bank 
 
 | What | How |
 |---|---|
-| Framework | Next.js 16.2 (App Router) |
+| Framework | Next.js 16.2 (App Router, Turbopack) |
 | Styling | Tailwind CSS v4 |
-| AI | Google Gemini 2.0 Flash (`@google/generative-ai`) |
-| Database | SQLite via Prisma 7 + LibSQL adapter |
+| AI | Groq — `llama-3.3-70b-versatile` (free tier, no credit card) |
+| Database | Turso (cloud SQLite via LibSQL + Prisma 7) |
+| Speech | Web Speech API — SpeechRecognition + SpeechSynthesis |
+| Hosting | Vercel |
 | File parsing | `pdf-parse` for PDFs, `mammoth` for DOCX |
 
-I chose Gemini over other providers because it has a genuinely usable free tier — 15 requests/minute and 1 million tokens per day. For interview practice that's effectively unlimited.
+Groq's free tier gives 6,000 requests/day on llama-3.3-70b — more than enough for interview practice.
 
 ---
 
-## Setup
+## Setup (local)
 
-### 1. Install dependencies
+### 1. Clone and install
 
 ```bash
+git clone https://github.com/waqar629/Ai-Interview-Coach.git
+cd Ai-Interview-Coach
 npm install
 ```
 
-### 2. Get a free Gemini API key
+### 2. Get a free Groq API key
 
-1. Go to [aistudio.google.com](https://aistudio.google.com) and sign in with your Google account
-2. Click **Get API key** in the sidebar → **Create API key**
-3. Copy the key (it starts with `AI...`)
+1. Go to [console.groq.com](https://console.groq.com) and create a free account
+2. Navigate to **API Keys** → **Create API Key**
+3. Copy the key (starts with `gsk_`)
 
-That's it. No billing info, no credit card.
+No billing info required.
 
-### 3. Add the key to your environment
+### 3. Set up a free Turso database
 
-Open `.env.local` in the project root — it already exists with placeholders:
+1. Go to [turso.tech](https://turso.tech) and sign up
+2. Create a new database
+3. Copy the database URL and auth token from the dashboard
+
+### 4. Add environment variables
+
+Create `.env.local` in the project root:
 
 ```env
-GEMINI_API_KEY=your_gemini_api_key_here
-DATABASE_URL="file:./dev.db"
+GROQ_API_KEY=gsk_your_key_here
+
+TURSO_DATABASE_URL=libsql://your-db.turso.io
+TURSO_AUTH_TOKEN=your_auth_token_here
+DATABASE_URL=libsql://your-db.turso.io?authToken=your_auth_token_here
 ```
 
-Replace `your_gemini_api_key_here` with your actual key and save the file.
-
-> **Keep this key safe.** Don't paste it into your README, don't commit it to git. The `.env.local` file is already in `.gitignore` so as long as you only edit that file you're fine.
-
-After changing `.env.local`, restart the dev server for the new value to take effect.
-
-### 4. Set up the database
+### 5. Push the database schema
 
 ```bash
-npx prisma migrate dev
+node prisma/migrate.js
 ```
 
-This creates a local SQLite file at `prisma/dev.db`. Nothing to configure — it just works.
-
-### 5. Start the app
+### 6. Start the app
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). You should see the role picker immediately.
+Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
 ## How to use it
 
-**Pick a role.** The preset cards cover the most common technical roles. If your target role isn't listed, click the **Custom Role** card (the dashed one at the end).
+**Choose your language** — English or German. The AI conducts the entire interview in your chosen language, and all UI labels switch too.
 
-**Add your context** (highly recommended for Custom Role, available for any role). A modal opens where you can:
-- Paste your CV or resume text directly
-- Or click "Upload file" to attach a PDF, DOCX, or TXT — the text is extracted server-side automatically
-- Paste the job description for the role you're applying to
+**Pick a role** — select from the preset cards or click **Custom Role** to enter any job title and optionally paste your CV and the target job description. The more context you give, the more tailored the questions.
 
-The more context you give, the more relevant the questions will be. Without any context, the AI asks solid general questions for the role. With your CV and JD, it digs into the specific technologies, experience gaps, and requirements that actually matter for that application.
+**Choose interview type:**
+- *HR / Behavioral* — motivation, teamwork, conflict resolution, culture fit. Zero technical questions.
+- *Technical* — architecture decisions, conceptual depth, trade-offs, role-specific knowledge.
+- *Practical / Coding* — live implementation thinking, debugging, real-world problem solving.
 
-**Choose difficulty.**
-- *Easy* — fundamentals and concepts; good for first-time practice or quick revision
-- *Medium* — the standard mix of theory and scenario-based questions you'd get in a real interview
-- *Hard* — deep technical dives, trade-off discussions, architecture decisions; aims at senior-level depth
+**Choose difficulty:**
+- *Easy* — fundamentals and concepts; good for first-time practice
+- *Medium* — the standard mix you'd get in a real interview
+- *Hard* — deep dives, edge cases, senior-level expectations
 
-**Do the interview.** The AI greets you and asks the first question. Answer in the text box as you would in a real interview — full sentences, as much detail as you want. It follows up, probes your answers, and moves through different topics. After 6–8 exchanges it wraps up naturally.
+**Do the interview.** Answer in the text box or click the microphone to speak. The AI reads each question aloud — mute it with the speaker button if you prefer silence. After 6–8 exchanges it wraps up naturally.
 
-**Check your results.** After the interview ends (automatically or via the End Interview button), you're taken to a results page with scores across four categories, a list of specific strengths and weaknesses, and improvement suggestions.
+**Get your results.** Scores across technical, communication, and confidence dimensions, plus specific strengths, weaknesses, and concrete suggestions to improve.
 
 ---
 
@@ -113,26 +120,32 @@ The more context you give, the more relevant the questions will be. Without any 
 src/
 ├── app/
 │   ├── api/
-│   │   ├── extract-cv/          # Handles file uploads, extracts text from PDF/DOCX/TXT
+│   │   ├── extract-cv/          # Extracts text from PDF / DOCX / TXT uploads
 │   │   └── interview/
-│   │       ├── start/           # Creates the interview record, gets the first question from Gemini
+│   │       ├── start/           # Creates interview record, gets opening question from Groq
 │   │       ├── [id]/
-│   │       │   ├── route.ts     # GET — fetches a full interview with all messages and result
-│   │       │   ├── message/     # POST — sends your answer, gets the AI's next question
-│   │       │   └── end/         # POST — runs the evaluation, saves scores to the database
-│   ├── interview/[id]/          # The live interview chat page
-│   ├── results/[id]/            # Results and breakdown page
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx                 # Home page — role picker and difficulty selector
+│   │       │   ├── route.ts     # GET — full interview with messages
+│   │       │   ├── message/     # POST — sends answer, returns next AI question
+│   │       │   └── end/         # POST — runs evaluation, saves scores
+│   ├── interview/[id]/          # Live interview chat page (voice + text)
+│   ├── results/[id]/            # Scores and feedback page
+│   ├── globals.css              # Dark-by-default CSS variables
+│   ├── layout.tsx               # Root layout with theme script, toggle, footer
+│   └── page.tsx                 # Home — role picker, language, interview type, difficulty
+├── components/
+│   ├── ThemeProvider.tsx        # Dark/light context with localStorage persistence
+│   ├── ThemeToggle.tsx          # Sun/moon toggle button
+│   └── FloatingContact.tsx      # Fixed bottom-right contact card
 ├── lib/
-│   ├── prisma.ts                # Prisma client (singleton to avoid connection issues in Next.js dev)
-│   └── prompts.ts               # Builds the system prompt and evaluation prompt from role/difficulty/context
+│   ├── prisma.ts                # Prisma + LibSQL adapter (Turso)
+│   └── prompts.ts               # System prompt builder (role, difficulty, language, interview type)
 └── types/
-    └── index.ts                 # Shared TypeScript interfaces
+    └── index.ts
+public/
+├── avatar.jpg                   # Photo used in interview chat
+└── profile.png                  # Photo used in contact widget
 prisma/
-├── schema.prisma                # Interview, Message, and Result models
-└── dev.db                       # SQLite database — auto-created, gitignored
+└── schema.prisma                # Interview, Message, Result models
 ```
 
 ---
@@ -141,48 +154,35 @@ prisma/
 
 | Variable | What it's for |
 |---|---|
-| `GEMINI_API_KEY` | Your Google Gemini API key — get one free at aistudio.google.com |
-| `DATABASE_URL` | Path to the SQLite file — default `file:./dev.db` is fine, don't change it unless you have a reason |
+| `GROQ_API_KEY` | Groq API key — free at console.groq.com |
+| `TURSO_DATABASE_URL` | Turso database URL (`libsql://...`) |
+| `TURSO_AUTH_TOKEN` | Turso auth token |
+| `DATABASE_URL` | Full libsql URL with auth token (used by Prisma) |
 
 ---
 
-## Useful Commands
+## Deployment
 
-```bash
-# Run the dev server
-npm run dev
+The app is deployed on **Vercel** with **Turso** as the cloud database. Vercel picks up environment variables from the project settings. The build command is `prisma generate && next build`.
 
-# Inspect your database visually (interviews, messages, results)
-npx prisma studio
-
-# Apply schema changes after editing prisma/schema.prisma
-npx prisma migrate dev
-
-# Build and run in production mode
-npm run build
-npm run start
-```
-
-I find it useful to keep two terminal tabs open during development — one for `npm run dev` and one for `npx prisma studio`. The studio lets you browse interviews and messages in real time while you test.
+To deploy your own copy:
+1. Fork the repo
+2. Connect to Vercel
+3. Add the four environment variables in Vercel project settings
+4. Deploy
 
 ---
 
-## Troubleshooting
+## Contact
 
-**"Failed to start interview" on the home page**
-Almost always a missing or invalid Gemini API key. Check that `.env.local` has your real key (not the placeholder), then restart the dev server. Changes to `.env.local` don't hot-reload — you need to kill and restart `npm run dev`.
+Built by **Waqar Hassan**
 
-**File upload returns empty text**
-Scanned PDFs (where the content is just an image with no text layer) won't extract correctly. Copy-paste the text manually instead. Regular PDFs exported from Word or text editors work fine.
-
-**The AI ends the interview after only a few messages**
-This is intentional — the prompt tells it to wrap up after 6–8 exchanges to keep sessions focused. If you want longer, more in-depth sessions, try Hard difficulty; it tends to go deeper on each topic before moving on.
-
-**Prisma errors on first run**
-Make sure you ran `npx prisma migrate dev` before starting the server. If the `prisma/dev.db` file doesn't exist, the app can't save or retrieve any data.
+- LinkedIn: [linkedin.com/in/waqar628](https://www.linkedin.com/in/waqar628/)
+- GitHub: [github.com/waqar629](https://github.com/waqar629)
+- Email: waqarhassan630@gmail.com
 
 ---
 
 ## License
 
-MIT — use it however you like.
+MIT

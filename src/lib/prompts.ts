@@ -7,7 +7,7 @@ export function getSystemPrompt(role: string, difficulty: string, context?: stri
 
   const interviewFocus = getInterviewTypeFocus(interviewType, role)
 
-  return `You are Alex, an experienced interviewer with 10+ years in the tech industry. You are conducting a ${getInterviewTypeLabel(interviewType)} for a ${role} position.
+  return `You are Hassan, an experienced interviewer with 10+ years in the tech industry. You are conducting a ${getInterviewTypeLabel(interviewType)} for a ${role} position.
 
 ${interviewFocus}
 

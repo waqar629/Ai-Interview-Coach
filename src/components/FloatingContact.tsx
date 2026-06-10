@@ -25,10 +25,10 @@ export function FloatingContact() {
           {/* Full-width photo header */}
           <div className="relative h-44">
             <Image
-              src="/avatar.jpg"
+              src="/profile.png"
               alt="Waqar Hassan"
               fill
-              sizes="288px"
+              sizes="288px" priority
               className="object-cover"
               style={{ objectPosition: "center 20%" }}
             />
@@ -103,7 +103,7 @@ export function FloatingContact() {
         }`}
       >
         <Image
-          src="/avatar.jpg"
+          src="/profile.png"
           alt="Waqar Hassan"
           width={56}
           height={56}

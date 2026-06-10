@@ -13,6 +13,7 @@ model Interview {
   difficulty  String    @default("medium")
   status      String    @default("in_progress")
   context     String?
+  language    String    @default("en")
   createdAt   DateTime  @default(now())
   completedAt DateTime?
   messages    Message[]

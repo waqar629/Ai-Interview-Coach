@@ -43,7 +43,8 @@ export async function POST(
     const systemPrompt = getSystemPrompt(
       interview.role,
       interview.difficulty,
-      interview.context ?? undefined
+      interview.context ?? undefined,
+      interview.language ?? "en"
     );
 
     const history = interview.messages.map((m) => ({

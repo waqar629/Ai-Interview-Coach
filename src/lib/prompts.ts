@@ -1,4 +1,4 @@
-export function getSystemPrompt(role: string, difficulty: string, context?: string): string {
+export function getSystemPrompt(role: string, difficulty: string, context?: string, language = "en"): string {
   const difficultyGuide = {
     easy: `Keep questions friendly and accessible. Focus on foundational concepts. If the candidate struggles, offer a small nudge — you want them to succeed, not freeze up.`,
     medium: `Mix conceptual and hands-on questions. Dig into the "why" behind answers. Push gently when something sounds rehearsed.`,
@@ -39,7 +39,9 @@ ${getRoleFocus(role)}
 ${context ? `ABOUT THIS CANDIDATE (use this to make questions personal and relevant — reference their background naturally, don't just read it back):
 ${context}
 
-` : ''}Start by greeting the candidate in a casual but professional way, maybe make a small comment about the role or the process, then jump straight into your first question. Make the opening feel human, not scripted.`
+` : ''}${language === "de" ? `SPRACHE: Führe dieses GESAMTE Gespräch auf Deutsch. Alle Fragen, Reaktionen und Antworten müssen auf Deutsch sein. Verwende einen professionellen aber natürlichen Ton mit "Sie". Wechsle unter keinen Umständen die Sprache.
+
+` : ""}Start by greeting the candidate in a casual but professional way, maybe make a small comment about the role or the process, then jump straight into your first question. Make the opening feel human, not scripted.`
 }
 
 function getRoleFocus(role: string): string {

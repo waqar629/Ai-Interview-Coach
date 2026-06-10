@@ -12,6 +12,7 @@ interface InterviewData {
   id: string;
   role: string;
   difficulty: string;
+  language: string;
   status: string;
   messages: Message[];
 }
@@ -70,8 +71,9 @@ export default function InterviewPage({ params }: PageProps) {
     const utterance = new SpeechSynthesisUtterance(lastMsg.content);
     utterance.rate = 0.95;
     utterance.pitch = 1;
+    utterance.lang = interview?.language === "de" ? "de-DE" : "en-US";
     window.speechSynthesis.speak(utterance);
-  }, [messages]);
+  }, [messages, interview]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -197,7 +199,7 @@ export default function InterviewPage({ params }: PageProps) {
     const recognition = new SR();
     recognition.continuous = true;
     recognition.interimResults = true;
-    recognition.lang = "en-US";
+    recognition.lang = interview?.language === "de" ? "de-DE" : "en-US";
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognition.onresult = (event: any) => {
@@ -348,6 +350,7 @@ export default function InterviewPage({ params }: PageProps) {
                     window.speechSynthesis.cancel();
                     const u = new SpeechSynthesisUtterance(msg.content);
                     u.rate = 0.95;
+                    u.lang = interview?.language === "de" ? "de-DE" : "en-US";
                     window.speechSynthesis.speak(u);
                   }}
                   className="self-start flex items-center gap-1 text-xs text-zinc-600 hover:text-violet-400 transition-colors"

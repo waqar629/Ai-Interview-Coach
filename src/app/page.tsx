@@ -33,6 +33,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [language, setLanguage] = useState<"en" | "de">("en");
   const [modalOpen, setModalOpen] = useState(false);
   const [customData, setCustomData] = useState<CustomRoleData | null>(null);
   const [draftRole, setDraftRole] = useState("");
@@ -101,6 +102,7 @@ export default function HomePage() {
           role: effectiveRole,
           difficulty: selectedDifficulty,
           context: effectiveContext || undefined,
+          language,
         }),
       });
       if (!res.ok) throw new Error("Failed to start interview");
@@ -259,6 +261,33 @@ export default function HomePage() {
       </div>
 
       <div className="w-full max-w-3xl space-y-8">
+        {/* Language selector */}
+        <div className="flex items-center justify-center gap-2">
+          <span className="text-xs text-zinc-500 uppercase tracking-wider font-semibold">Language</span>
+          <div className="flex rounded-xl overflow-hidden border border-zinc-700 bg-zinc-900">
+            <button
+              onClick={() => setLanguage("en")}
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all ${
+                language === "en"
+                  ? "bg-violet-600 text-white"
+                  : "text-zinc-400 hover:text-zinc-200"
+              }`}
+            >
+              🇬🇧 English
+            </button>
+            <button
+              onClick={() => setLanguage("de")}
+              className={`flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all ${
+                language === "de"
+                  ? "bg-violet-600 text-white"
+                  : "text-zinc-400 hover:text-zinc-200"
+              }`}
+            >
+              🇩🇪 Deutsch
+            </button>
+          </div>
+        </div>
+
         {/* Role selection */}
         <section>
           <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">

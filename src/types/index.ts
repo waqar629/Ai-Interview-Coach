@@ -1,5 +1,7 @@
 export type Difficulty = 'easy' | 'medium' | 'hard'
 
+export type InterviewType = 'hr' | 'technical' | 'practical'
+
 export type InterviewRole =
   | 'Frontend Developer'
   | 'Backend Developer'

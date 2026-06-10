@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { InterviewRole, Difficulty } from "@/types";
+import type { InterviewRole, Difficulty, InterviewType } from "@/types";
 
 const ROLES: { label: string; icon: string; description: string }[] = [
   { label: "Frontend Developer", icon: "🎨", description: "HTML, CSS, JS, browser APIs" },
@@ -34,6 +34,7 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
 
   const [language, setLanguage] = useState<"en" | "de">("en");
+  const [interviewType, setInterviewType] = useState<InterviewType>("technical");
   const [modalOpen, setModalOpen] = useState(false);
   const [customData, setCustomData] = useState<CustomRoleData | null>(null);
   const [draftRole, setDraftRole] = useState("");
@@ -103,6 +104,7 @@ export default function HomePage() {
           difficulty: selectedDifficulty,
           context: effectiveContext || undefined,
           language,
+          interviewType,
         }),
       });
       if (!res.ok) throw new Error("Failed to start interview");
@@ -293,6 +295,7 @@ export default function HomePage() {
           <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">
             1. Choose Your Role
           </h2>
+
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {ROLES.map((r) => (
               <button
@@ -330,10 +333,53 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Interview Type */}
+        <section>
+          <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">
+            2. Interview Type
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {[
+              {
+                value: "hr" as InterviewType,
+                icon: "🤝",
+                label: "HR / Behavioral",
+                description: "Communication, motivation, teamwork, culture fit",
+              },
+              {
+                value: "technical" as InterviewType,
+                icon: "🧠",
+                label: "Technical",
+                description: "Technical knowledge, architecture, concepts, problem solving",
+              },
+              {
+                value: "practical" as InterviewType,
+                icon: "💻",
+                label: "Practical / Coding",
+                description: "Live coding, assignments, real-world implementation, debugging",
+              },
+            ].map((t) => (
+              <button
+                key={t.value}
+                onClick={() => setInterviewType(t.value)}
+                className={`flex flex-col items-start gap-1.5 p-4 rounded-xl border text-left transition-all ${
+                  interviewType === t.value
+                    ? "border-violet-500 bg-violet-500/15 text-white"
+                    : "border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200"
+                }`}
+              >
+                <span className="text-2xl">{t.icon}</span>
+                <span className="text-sm font-semibold leading-tight">{t.label}</span>
+                <span className="text-xs text-zinc-500 leading-snug">{t.description}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+
         {/* Difficulty selection */}
         <section>
           <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">
-            2. Select Difficulty
+            3. Select Difficulty
           </h2>
           <div className="flex gap-3">
             {DIFFICULTIES.map((d) => (

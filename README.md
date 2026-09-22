@@ -1,6 +1,6 @@
 # Hassan's AI Interview Coach
 
-A personal AI-powered mock interview platform built by **Waqar Hassan**. Pick a role, choose your interview type and difficulty, and face a realistic AI interviewer that asks follow-up questions and scores your performance — all for free.
+A personal AI-powered mock interview platform built by **Waqar Hassan** (with help from Claude AI during development). Pick a role, choose your interview type and difficulty, and face a realistic AI interviewer that asks follow-up questions and scores your performance — all for free.
 
 Live at: [waqar-ai-coach.vercel.app](https://waqar-ai-coach.vercel.app)
 

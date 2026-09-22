@@ -7,7 +7,6 @@ export type InterviewRole =
   | 'Backend Developer'
   | 'Full Stack Developer'
   | 'React Developer'
-  | 'Node.js Developer'
   | 'DevOps Engineer'
   | 'Data Scientist'
   | 'Mobile Developer'

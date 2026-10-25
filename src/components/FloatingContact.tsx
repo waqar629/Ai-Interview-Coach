@@ -92,6 +92,16 @@ export function FloatingContact() {
         </div>
       )}
 
+      {/* Popping speech bubble */}
+      {!open && (
+        <button
+          onClick={() => setOpen(true)}
+          className="absolute right-16 bottom-3 whitespace-nowrap px-4 py-2 rounded-2xl rounded-br-sm bg-violet-600 text-white text-sm font-bold shadow-lg animate-bounce hover:bg-violet-700"
+        >
+          Let&apos;s talk 💬
+        </button>
+      )}
+
       {/* Trigger button — photo avatar */}
       <button
         onClick={() => setOpen(!open)}

@@ -24,7 +24,7 @@ export default function RootLayout({
     <html lang="en" className={geist.variable} suppressHydrationWarning>
       <head>
         {/* Set theme before first paint to prevent flash */}
-        <script dangerouslySetInnerHTML={{ __html: `try{document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'dark')}catch(e){document.documentElement.setAttribute('data-theme','dark')}` }} />
+        <script dangerouslySetInnerHTML={{ __html: `try{document.documentElement.setAttribute('data-theme',localStorage.getItem('theme')||'light')}catch(e){document.documentElement.setAttribute('data-theme','light')}` }} />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground antialiased font-[family-name:var(--font-geist)] transition-colors duration-200">
         <ThemeProvider>

@@ -43,6 +43,8 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     console.error("[interview/start]", err);
-    return Response.json({ error: "Failed to start interview" }, { status: 500 });
+    // TEMP DEBUG: expose real error; remove after diagnosing
+    const detail = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+    return Response.json({ error: "Failed to start interview", detail }, { status: 500 });
   }
 }

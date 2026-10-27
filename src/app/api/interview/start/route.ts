@@ -1,10 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import Groq from "groq-sdk";
 import { getSystemPrompt } from "@/lib/prompts";
-import { GROQ_MODEL } from "@/lib/groq";
-
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+import { chatCompletion } from "@/lib/groq";
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,8 +18,7 @@ export async function POST(request: NextRequest) {
     const systemPrompt = getSystemPrompt(role, difficulty, context, language, interviewType);
     const greeting = language === "de" ? "Hallo, ich bin bereit zu beginnen." : "Hello, I'm ready to start.";
 
-    const response = await groq.chat.completions.create({
-      model: GROQ_MODEL,
+    const response = await chatCompletion({
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: greeting },

@@ -1,10 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import Groq from "groq-sdk";
 import { getSystemPrompt } from "@/lib/prompts";
-import { GROQ_MODEL } from "@/lib/groq";
-
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+import { chatCompletion } from "@/lib/groq";
 
 const INTERVIEW_COMPLETE_PHRASES = [
   "that concludes our interview",
@@ -54,8 +51,7 @@ export async function POST(
       content: m.content,
     }));
 
-    const response = await groq.chat.completions.create({
-      model: GROQ_MODEL,
+    const response = await chatCompletion({
       messages: [
         { role: "system", content: systemPrompt },
         ...history,

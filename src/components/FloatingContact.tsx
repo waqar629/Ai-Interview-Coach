@@ -75,6 +75,18 @@ export function FloatingContact() {
               </a>
 
               <a
+                href="https://waqarhassan.netlify.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-sm font-bold transition-colors"
+              >
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18zm0 0c2.5-2.4 4-5.5 4-9s-1.5-6.6-4-9m0 18c-2.5-2.4-4-5.5-4-9s1.5-6.6 4-9M3.6 9h16.8M3.6 15h16.8" />
+                </svg>
+                Portfolio
+              </a>
+
+              <a
                 href="mailto:waqarhassan630@gmail.com"
                 className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-violet-50 dark:bg-violet-900/20 hover:bg-violet-100 dark:hover:bg-violet-900/30 text-violet-700 dark:text-violet-400 text-sm font-bold transition-colors"
               >

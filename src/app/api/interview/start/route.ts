@@ -2,6 +2,7 @@ import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import Groq from "groq-sdk";
 import { getSystemPrompt } from "@/lib/prompts";
+import { GROQ_MODEL } from "@/lib/groq";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
     const greeting = language === "de" ? "Hallo, ich bin bereit zu beginnen." : "Hello, I'm ready to start.";
 
     const response = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: GROQ_MODEL,
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: greeting },
@@ -43,8 +44,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     console.error("[interview/start]", err);
-    // TEMP DEBUG: expose real error; remove after diagnosing
-    const detail = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
-    return Response.json({ error: "Failed to start interview", detail }, { status: 500 });
+    return Response.json({ error: "Failed to start interview" }, { status: 500 });
   }
 }

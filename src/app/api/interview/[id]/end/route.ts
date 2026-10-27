@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import Groq from "groq-sdk";
 import { getEvaluationPrompt } from "@/lib/prompts";
+import { GROQ_MODEL } from "@/lib/groq";
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -33,7 +34,7 @@ export async function POST(
     const evalPrompt = getEvaluationPrompt(interview.role, interview.difficulty, conversation);
 
     const response = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: GROQ_MODEL,
       messages: [{ role: "user", content: evalPrompt }],
     });
 
